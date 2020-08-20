@@ -1,0 +1,31 @@
+version: '3'
+services:
+  nginx:
+    image: staticfloat/nginx-certbot
+    ports:
+      - "0.0.0.0:80:80"
+      - "0.0.0.0:443:443"
+    environment:
+      CERTBOT_EMAIL: info@example.com
+    volumes:
+      - ./user.conf.d:/etc/nginx/user.conf.d:ro
+      - ./letsencrypt:/etc/letsencrypt
+      # mastodon root
+      - ../mastodon/public/:/home/mastodon/live/public
+      # nextcloud root
+      - ../nextcloud/app:/var/www/html
+    restart: always
+    networks:
+      - mastodon_external_network
+      - nextcloud_external_network
+      - internal_network
+
+networks:
+  nextcloud_external_network:
+    external:
+      name: nextcloud_external_network
+  mastodon_external_network:
+    external:
+      name: mastodon_external_network
+  internal_network:
+    internal: true

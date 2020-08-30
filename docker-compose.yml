@@ -13,12 +13,17 @@ services:
       # mastodon root
       - ../mastodon/public/:/home/mastodon/live/public
       # nextcloud root
-      - ../nextcloud/app:/var/www/html
+      - nextcloud_data:/var/www/html
     restart: always
     networks:
       - mastodon_external_network
       - nextcloud_external_network
       - internal_network
+
+volumes:
+  nextcloud_data:
+    external:
+      name: nextcloud_data
 
 networks:
   nextcloud_external_network:
